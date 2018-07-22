@@ -1,25 +1,37 @@
 import React from 'react';
-import { StyleSheet, Text, View,TextInput } from 'react-native';
-
+import { StyleSheet, Text, View,TextInput,Image, TouchableHighlight } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import image from './Assets/image121.png'
 
 function RoundedButton ({title, color, backgroundColor, onPress}){
 
 return (
-<View style={[styles.ButtonStyle,{backgroundColor}]}>
-   <Text style = { [ {color}] }  onPress={() =>  onPress()} >{title}</Text>
+<View >
+  <TouchableHighlight
+  onPress={() =>  onPress()}
+  style={[styles.ButtonStyle,{backgroundColor}]}
+  >
+   <Text style = { [ {color}] }   >{title}</Text>
+   </TouchableHighlight>
  </View>)
 }
 
-function UserInput ({icon,response,placeHolder,TypingFunc}){
+function UserInput ({icon,response,placeHolder,TypingFunc,security}){
 
   return (<View style={styles.inputBox}>
-    
+     
+      <View>
+    <Icon name={icon} size={23} color="rgba(106, 154, 104, 1.0)" />
+    </View>
+    <View>
     <TextInput
-          style={this.TextField}
+          secureTextEntry={security}
+          style={styles.TextField}
+          maxLength = {50}
           placeholder={placeHolder}
           onChangeText={(text) => TypingFunc({text})}
         />
-    
+      </View>
     </View>)
 }
 
@@ -29,32 +41,45 @@ export default class App extends React.Component {
       <View style={styles.container}>
       <View style={styles.image}>
 
-
+           <Image source={image} style={{width: 210, height: 210}} />
       </View>
       <View style={styles.input}>
        <UserInput
        placeHolder = {'User Name'}
        TypingFunc = {this.TypingUserName}
+       icon ={'user'}
+       security = {false}
       />
       <UserInput
        placeHolder = {'Password'}
        TypingFunc = {this.TypingPassword}
+       icon = {'lock'}
+       security = {true}
       />
       </View>
       <View style={styles.button}>
        < RoundedButton
-       backgroundColor = {'yellow'}
-       title = {'kingsley'}
-       color = {'red'}
+       backgroundColor = {'rgba(106, 154, 104, 1.0)'}
+       title = {'Button'}
+       color = {'white'}
        onPress = {this.ButtonResponse}
        />
        </View >
        <View style={styles.LastButtonsView}>
        <View style={styles.LastButtons}>
-       <Text>Sign in With FaceBook</Text>
+       <Icon.Button name="facebook" backgroundColor="#3b5998" onPress={this.loginWithFacebook}>
+        Login with Facebook
+       </Icon.Button>
+        </View>
+        <View style={styles.LastButtonGmail}>
+        <Icon.Button name="google" color = 'red' backgroundColor="white" onPress={this.loginWithFacebook}>
+        Login with Gmail
+       </Icon.Button>
         </View>
         <View style={styles.LastButtons}>
-         <Text>New to App, Sign Up</Text>
+        <Icon.Button   name = "user" backgroundColor="rgba(106, 154, 104, 1.0)" onPress={this.loginWithFacebook}>
+         New to the App, Sign up now!
+       </Icon.Button>
         </View>
         </View>
       </View>
@@ -67,6 +92,9 @@ export default class App extends React.Component {
   TypingPassword =(data )=>{
 
     console.log(data)
+  }
+  ButtonResponse =()=>{
+    console.log("submit button")
   }
 
 }
@@ -95,22 +123,24 @@ const styles = StyleSheet.create({
   ButtonStyle:{
   height : 50,
   width: 300,
- 
+  borderRadius : 10,
   justifyContent: 'center',
   alignItems: 'center',
 
   },
   TextField:{
-   
-  
+    margin: 20,
+    fontSize: 16,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'gray'
+
   },
   inputBox:{
+    flexDirection:"row",
     margin: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     borderWidth: 1,
     borderRadius : 10,
     borderColor : 'gray',
@@ -119,12 +149,18 @@ const styles = StyleSheet.create({
   },
   LastButtons:{
 
-    backgroundColor : 'gray',
+   
     height : 50,
     width: 380,
     
   },
   LastButtonsView:{
     
+  },
+  LastButtonGmail:{
+  marginBottom: 10,
+  borderWidth: 2,
+  borderColor: 'red',
+  borderRadius : 5,
   }
 });
